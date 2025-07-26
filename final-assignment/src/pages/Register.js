@@ -1,9 +1,9 @@
-// src/pages/Login.js
+// src/pages/Register.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import bcrypt from 'bcryptjs'; // ✅ Import bcrypt
+import bcrypt from 'bcryptjs'; // Thêm dòng này
 
-function Login({ setUser }) {
+function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -12,21 +12,20 @@ function Login({ setUser }) {
     e.preventDefault();
     const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    const user = users.find(u => u.username === username);
-
-    if (user && bcrypt.compareSync(password, user.password)) {
-      // Nếu mật khẩu khớp
-      setUser(user);
-      localStorage.setItem('user', JSON.stringify(user));
-      navigate('/dashboard');
+    if (users.find(u => u.username === username)) {
+      alert('User already exists');
     } else {
-      alert('Invalid username or password');
+      const hashedPassword = bcrypt.hashSync(password, 10); // Băm mật khẩu
+      users.push({ username, password: hashedPassword }); // Lưu mật khẩu đã băm
+      localStorage.setItem('users', JSON.stringify(users));
+      alert('Registration successful!');
+      navigate('/login');
     }
   };
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Register</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -34,18 +33,20 @@ function Login({ setUser }) {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-        /><br />
+        />
+        <br/>
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-        /><br />
-        <button type="submit">Login</button>
+        />
+        <br/>
+        <button type="submit">Register</button>
       </form>
     </div>
   );
 }
 
-export default Login;
+export default Register;
