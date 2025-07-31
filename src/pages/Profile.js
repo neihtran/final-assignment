@@ -1,3 +1,6 @@
+// src/pages/Profile.js
+import React from 'react';
+
 function Profile({ user }) {
   return (
     <div>
@@ -6,4 +9,5 @@ function Profile({ user }) {
     </div>
   );
 }
+
 export default Profile;

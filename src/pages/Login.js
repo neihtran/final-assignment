@@ -1,7 +1,6 @@
 // src/pages/Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import bcrypt from 'bcryptjs'; // ✅ Import bcrypt
 
 function Login({ setUser }) {
   const [username, setUsername] = useState('');
@@ -10,17 +9,15 @@ function Login({ setUser }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    const user = users.find(u => u.username === username);
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+    const user = storedUsers.find(u => u.username === username && u.password === password);
 
-    if (user && bcrypt.compareSync(password, user.password)) {
-      // Nếu mật khẩu khớp
+    if (user) {
       setUser(user);
-      localStorage.setItem('user', JSON.stringify(user));
       navigate('/dashboard');
     } else {
-      alert('Invalid username or password');
+      alert('Invalid credentials');
     }
   };
 
@@ -34,14 +31,16 @@ function Login({ setUser }) {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-        /><br />
+        />
+        <br/>
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-        /><br />
+        />
+        <br/>
         <button type="submit">Login</button>
       </form>
     </div>

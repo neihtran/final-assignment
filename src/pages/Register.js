@@ -1,3 +1,4 @@
+// src/pages/Register.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +16,7 @@ function Register() {
     } else {
       users.push({ username, password });
       localStorage.setItem('users', JSON.stringify(users));
-      alert('Registration successful');
+      alert('Registration successful!');
       navigate('/login');
     }
   };
@@ -30,14 +31,16 @@ function Register() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-        /><br/>
+        />
+        <br/>
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-        /><br/>
+        />
+        <br/>
         <button type="submit">Register</button>
       </form>
     </div>
