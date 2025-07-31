@@ -12,7 +12,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 
 // Google Analytics Measurement ID
-ReactGA.initialize('G-XXXXXXXXXX'); // 👈 thay bằng ID của bạn
+ReactGA.initialize('G-E9DQMZZTW3'); // 👈 thay bằng ID của bạn
 
 // Track page views khi route thay đổi
 function usePageTracking() {
