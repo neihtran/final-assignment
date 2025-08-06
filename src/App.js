@@ -1,56 +1,64 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import ReactGA from 'react-ga4'; // 👈 thêm dòng này
-
-// import các component như cũ...
+import ReactGA from 'react-ga4';
 import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import About from './pages/About';
-import Dashboard from './pages/Dashboard';
-import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Home from './pages/Home';
+import About from './pages/About';
 
-// Google Analytics Measurement ID
-ReactGA.initialize('G-E9DQMZZTW3'); // 👈 thay bằng ID của bạn
+// 💤 Lazy load các trang nặng
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Profile = lazy(() => import('./pages/Profile'));
 
-// Track page views khi route thay đổi
-function usePageTracking() {
-  const location = useLocation();
-
+function ScrollToTop() {
+  const { pathname } = useLocation();
   useEffect(() => {
-    ReactGA.send({ hitType: 'pageview', page: location.pathname });
-  }, [location]);
-}
-
-function AppWrapper() {
-  usePageTracking();
-
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')));
-
-  useEffect(() => {
-    localStorage.setItem('user', JSON.stringify(user));
-  }, [user]);
-
-  return (
-    <>
-      <Navbar user={user} setUser={setUser} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
-        <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to="/login" />} />
-        <Route path="/login" element={<Login setUser={setUser} />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </>
-  );
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
 }
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  // Khởi tạo Google Analytics
+  useEffect(() => {
+    ReactGA.initialize('G-E9DQMZZTW3'); // Thay mã của bạn vào đây
+    ReactGA.send({ hitType: 'pageview', page: window.location.pathname });
+  }, []);
+
   return (
     <Router>
-      <AppWrapper />
+      <ScrollToTop />
+      <Navbar user={user} setUser={setUser} />
+      <Suspense fallback={<div>Đang tải trang...</div>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route
+            path="/dashboard"
+            element={
+              user ? <Dashboard /> : <Navigate to="/login" replace />
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              user ? <Profile user={user} /> : <Navigate to="/login" replace />
+            }
+          />
+          <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }
