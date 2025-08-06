@@ -7,7 +7,6 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import About from './pages/About';
 
-// 💤 Lazy load các trang nặng
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Profile = lazy(() => import('./pages/Profile'));
 
@@ -29,9 +28,8 @@ function App() {
     }
   }, []);
 
-  // Khởi tạo Google Analytics
   useEffect(() => {
-    ReactGA.initialize('G-E9DQMZZTW3'); // Thay mã của bạn vào đây
+    ReactGA.initialize('G-E9DQMZZTW3'); 
     ReactGA.send({ hitType: 'pageview', page: window.location.pathname });
   }, []);
 
