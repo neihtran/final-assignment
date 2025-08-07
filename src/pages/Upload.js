@@ -1,5 +1,5 @@
-// src/pages/Upload.js
 import React, { useState, useEffect } from 'react';
+import './Upload.css';
 
 function Upload() {
   const [images, setImages] = useState([]);
@@ -18,13 +18,20 @@ function Upload() {
       reader.onloadend = () => {
         newImages.push(reader.result);
         if (newImages.length === files.length) {
-          const updatedImages = [...images, ...newImages];
-          setImages(updatedImages);
-          localStorage.setItem('uploadedImages', JSON.stringify(updatedImages));
+          const updated = [...images, ...newImages];
+          setImages(updated);
+          localStorage.setItem('uploadedImages', JSON.stringify(updated));
         }
       };
       reader.readAsDataURL(file);
     });
+  };
+
+  const handleDelete = (index) => {
+    const updated = [...images];
+    updated.splice(index, 1);
+    setImages(updated);
+    localStorage.setItem('uploadedImages', JSON.stringify(updated));
   };
 
   return (
@@ -33,7 +40,10 @@ function Upload() {
       <input type="file" multiple accept="image/*" onChange={handleUpload} />
       <div className="gallery">
         {images.map((img, index) => (
-          <img key={index} src={img} alt={`upload-${index}`} />
+          <div className="image-wrapper" key={index}>
+            <img src={img} alt={`upload-${index}`} />
+            <button className="delete-btn" onClick={() => handleDelete(index)}>X</button>
+          </div>
         ))}
       </div>
     </div>
