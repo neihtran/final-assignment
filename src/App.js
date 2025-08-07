@@ -1,3 +1,4 @@
+// App.js
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import ReactGA from 'react-ga4';
@@ -6,11 +7,14 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import About from './pages/About';
+import Upload from './pages/Upload';
 import './App.css';
 
+// Lazy loading cho những page không cần load ngay
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Profile = lazy(() => import('./pages/Profile'));
 
+// Tự cuộn lên đầu khi chuyển trang
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -22,6 +26,7 @@ function ScrollToTop() {
 function App() {
   const [user, setUser] = useState(null);
 
+  // Lấy thông tin user từ localStorage khi app khởi chạy
   useEffect(() => {
     const userData = localStorage.getItem('user');
     if (userData) {
@@ -42,17 +47,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/upload" element={user ? <Upload user={user} /> : <Navigate to="/login" replace />} />
           <Route
             path="/dashboard"
-            element={
-              user ? <Dashboard /> : <Navigate to="/login" replace />
-            }
+            element={user ? <Dashboard /> : <Navigate to="/login" replace />}
           />
           <Route
             path="/profile"
-            element={
-              user ? <Profile user={user} /> : <Navigate to="/login" replace />
-            }
+            element={user ? <Profile user={user} /> : <Navigate to="/login" replace />}
           />
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/register" element={<Register />} />
