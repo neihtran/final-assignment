@@ -1,4 +1,3 @@
-// src/pages/Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,7 +8,6 @@ function Login({ setUser }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
     const user = storedUsers.find(u => u.username === username && u.password === password);
 
@@ -22,7 +20,7 @@ function Login({ setUser }) {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -32,7 +30,7 @@ function Login({ setUser }) {
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-        <br/>
+        <br />
         <input
           type="password"
           placeholder="Password"
@@ -40,7 +38,7 @@ function Login({ setUser }) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <br/>
+        <br />
         <button type="submit">Login</button>
       </form>
     </div>

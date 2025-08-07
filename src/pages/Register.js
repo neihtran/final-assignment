@@ -1,4 +1,3 @@
-// src/pages/Register.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,7 +21,7 @@ function Register() {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Register</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -32,7 +31,7 @@ function Register() {
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-        <br/>
+        <br />
         <input
           type="password"
           placeholder="Password"
@@ -40,7 +39,7 @@ function Register() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <br/>
+        <br />
         <button type="submit">Register</button>
       </form>
     </div>
