@@ -1,41 +1,41 @@
+// src/pages/Upload.js
 import React, { useState, useEffect } from 'react';
 
 function Upload() {
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem('uploadedImage');
-    if (stored) setImage(stored);
+    const stored = JSON.parse(localStorage.getItem('uploadedImages')) || [];
+    setImages(stored);
   }, []);
 
   const handleUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
+    const files = Array.from(e.target.files);
+    const newImages = [];
 
-    reader.onloadend = () => {
-      setImage(reader.result);
-      localStorage.setItem('uploadedImage', reader.result);
-    };
-
-    if (file) {
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        newImages.push(reader.result);
+        if (newImages.length === files.length) {
+          const updatedImages = [...images, ...newImages];
+          setImages(updatedImages);
+          localStorage.setItem('uploadedImages', JSON.stringify(updatedImages));
+        }
+      };
       reader.readAsDataURL(file);
-    }
+    });
   };
 
   return (
     <div className="container">
-      <h1>Upload Image Demo</h1>
-      <input type="file" accept="image/*" onChange={handleUpload} />
-      {image && (
-        <div style={{ marginTop: '20px' }}>
-          <h3>Uploaded Image:</h3>
-          <img
-            src={image}
-            alt="Uploaded"
-            style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
-          />
-        </div>
-      )}
+      <h2>Tải nhiều ảnh</h2>
+      <input type="file" multiple accept="image/*" onChange={handleUpload} />
+      <div className="gallery">
+        {images.map((img, index) => (
+          <img key={index} src={img} alt={`upload-${index}`} />
+        ))}
+      </div>
     </div>
   );
 }

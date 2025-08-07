@@ -1,10 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Navbar({ user, setUser }) {
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    navigate('/login');
   };
 
   return (
@@ -14,6 +17,7 @@ function Navbar({ user, setUser }) {
         <>
           <Link to="/dashboard">Dashboard</Link> |
           <Link to="/profile">Profile</Link> |
+          <Link to="/upload">Upload Ảnh</Link> |
           <button onClick={handleLogout}>Logout</button>
         </>
       ) : (
