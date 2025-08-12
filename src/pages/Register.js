@@ -13,7 +13,7 @@ function Register() {
     if (users.find(u => u.username === username)) {
       alert('User already exists');
     } else {
-      users.push({ username, password });
+      users.push({ username, password, images: [] });
       localStorage.setItem('users', JSON.stringify(users));
       alert('Registration successful!');
       navigate('/login');
@@ -24,21 +24,11 @@ function Register() {
     <div className="container">
       <h1>Register</h1>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
+        <input type="text" placeholder="Username"
+          value={username} onChange={(e) => setUsername(e.target.value)} required />
         <br />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <input type="password" placeholder="Password"
+          value={password} onChange={(e) => setPassword(e.target.value)} required />
         <br />
         <button type="submit">Register</button>
       </form>

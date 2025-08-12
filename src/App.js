@@ -34,6 +34,7 @@ function App() {
     }
   }, []);
 
+  // Google Analytics
   useEffect(() => {
     ReactGA.initialize('G-E9DQMZZTW3'); 
     ReactGA.send({ hitType: 'pageview', page: window.location.pathname });
@@ -47,7 +48,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/upload" element={user ? <Upload user={user} /> : <Navigate to="/login" replace />} />
+          {/* Chỉ user đã login mới vào upload được */}
+          <Route 
+            path="/upload" 
+            element={user ? <Upload user={user.username} /> : <Navigate to="/login" replace />} 
+          />
           <Route
             path="/dashboard"
             element={user ? <Dashboard /> : <Navigate to="/login" replace />}
