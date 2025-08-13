@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Auth.css';
 
 function Login({ setUser }) {
   const [username, setUsername] = useState('');
@@ -13,6 +14,7 @@ function Login({ setUser }) {
 
     if (user) {
       setUser(user);
+      localStorage.setItem('user', JSON.stringify(user));
       navigate('/dashboard');
     } else {
       alert('Invalid credentials');
@@ -20,27 +22,27 @@ function Login({ setUser }) {
   };
 
   return (
-    <div className="container">
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <br />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <br />
-        <button type="submit">Login</button>
-      </form>
+    <div className="auth-container">
+      <div className="auth-box">
+        <h1>Login</h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
   );
 }

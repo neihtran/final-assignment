@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Upload.css';
+import './Home.css';
 
 function Home() {
   const [allImages, setAllImages] = useState([]);

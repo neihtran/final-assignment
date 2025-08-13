@@ -10,8 +10,8 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import About from './pages/About';
 import Upload from './pages/Upload';
-import './Upload.css';
-import './About.css';
+import './pages/Upload.css';
+import './pages/About.css';
 
 // Lazy load các trang ít dùng
 const Dashboard = lazy(() => import('./pages/Dashboard'));

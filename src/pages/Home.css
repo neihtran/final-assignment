@@ -1,0 +1,103 @@
+/* ===== Thanh điều hướng ===== */
+.navbar {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, #4e73df, #1cc88a);
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  margin: 0 12px;
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar a:hover {
+  color: #ffeb3b;
+  transform: translateY(-2px);
+}
+
+.navbar button {
+  background-color: #e74a3b;
+  border: none;
+  padding: 6px 14px;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.navbar button:hover {
+  background-color: #c0392b;
+}
+
+/* ===== Lưới ảnh ===== */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.image-item {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Ảnh đồng kích thước cho tất cả trang */
+.upload-container .image-item img {
+  width: 100% !important;
+  height: 200px !important;
+  object-fit: cover !important;
+  display: block;
+}
+
+/* Tên user dưới ảnh */
+.image-item p {
+  font-weight: bold;
+  padding: 10px 0;
+  text-align: center;
+}
+
+/* ===== Pagination ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: none;
+  background-color: #4e73df;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #2e59d9;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination .active {
+  background-color: #1cc88a;
+}
