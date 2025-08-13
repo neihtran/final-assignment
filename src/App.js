@@ -1,20 +1,23 @@
-// App.js
+// src/App.js
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import ReactGA from 'react-ga4';
+
+// Components & Pages
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import About from './pages/About';
 import Upload from './pages/Upload';
-import './App.css';
+import './Upload.css';
+import './About.css';
 
-// Lazy loading cho những page không cần load ngay
+// Lazy load các trang ít dùng
 const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Profile = lazy(() => import('./pages/Profile'));
+const Profile   = lazy(() => import('./pages/Profile'));
 
-// Tự cuộn lên đầu khi chuyển trang
+// Auto scroll lên đầu khi đổi route
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -26,17 +29,34 @@ function ScrollToTop() {
 function App() {
   const [user, setUser] = useState(null);
 
-  // Lấy thông tin user từ localStorage khi app khởi chạy
+  // Khởi tạo user từ localStorage (hỗ trợ cả 'user' lẫn 'currentUser' để tương thích cũ)
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      setUser(JSON.parse(userData));
+    const storedUser = localStorage.getItem('user');
+    const legacyUser = localStorage.getItem('currentUser');
+
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        setUser(null);
+      }
+    } else if (legacyUser) {
+      try {
+        const parsed = JSON.parse(legacyUser);
+        setUser(parsed);
+        // Đồng bộ sang key mới
+        localStorage.setItem('user', JSON.stringify(parsed));
+        localStorage.removeItem('currentUser');
+      } catch {
+        setUser(null);
+      }
     }
   }, []);
 
-  // Google Analytics
+  // Google Analytics (nếu dùng GA4, thay ID bằng của bạn)
   useEffect(() => {
-    ReactGA.initialize('G-E9DQMZZTW3'); 
+    // Nếu chưa có ID, bạn có thể comment 2 dòng dưới
+    ReactGA.initialize('G-E9DQMZZTW3');
     ReactGA.send({ hitType: 'pageview', page: window.location.pathname });
   }, []);
 
@@ -44,25 +64,35 @@ function App() {
     <Router>
       <ScrollToTop />
       <Navbar user={user} setUser={setUser} />
-      <Suspense fallback={<div>Đang tải trang...</div>}>
+      <Suspense fallback={<div style={{textAlign:'center', padding:'20px'}}>Đang tải trang...</div>}>
         <Routes>
+          {/* Trang chủ: hiển thị ảnh của tất cả người dùng (đã phân trang trong Home.js) */}
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          {/* Chỉ user đã login mới vào upload được */}
-          <Route 
-            path="/upload" 
-            element={user ? <Upload user={user.username} /> : <Navigate to="/login" replace />} 
-          />
-          <Route
-            path="/dashboard"
-            element={user ? <Dashboard /> : <Navigate to="/login" replace />}
-          />
+
+          {/* About: chỉ caption nếu chưa login (truyền user để About biết trạng thái) */}
+          <Route path="/about" element={<About user={user} />} />
+
+          {/* Dashboard: danh sách toàn bộ người dùng (public) */}
+          <Route path="/dashboard" element={<Dashboard />} />
+
+          {/* Profile: thông tin đầy đủ của người dùng hiện tại */}
           <Route
             path="/profile"
-            element={user ? <Profile user={user} /> : <Navigate to="/login" replace />}
+            element={user ? <Profile /> : <Navigate to="/login" replace />}
           />
+
+          {/* Upload: chỉ cho user đã đăng nhập, truyền username để lưu ảnh theo user */}
+          <Route
+            path="/upload"
+            element={user ? <Upload user={user.username} /> : <Navigate to="/login" replace />}
+          />
+
+          {/* Auth */}
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/register" element={<Register />} />
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
     </Router>
