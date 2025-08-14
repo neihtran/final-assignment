@@ -9,8 +9,7 @@ function Profile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loggedInUser = JSON.parse(localStorage.getItem('user')) 
-      || JSON.parse(sessionStorage.getItem('user'));
+    const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
     if (!loggedInUser) {
       navigate('/login');
     } else {
@@ -27,7 +26,7 @@ function Profile() {
     let users = JSON.parse(localStorage.getItem('users')) || [];
     users = users.map(u => u.username === user.username ? formData : u);
     localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem('user', JSON.stringify(formData));
+    localStorage.setItem('currentUser', JSON.stringify(formData));
     setUser(formData);
     setEditMode(false);
   };
@@ -37,7 +36,7 @@ function Profile() {
       let users = JSON.parse(localStorage.getItem('users')) || [];
       users = users.filter(u => u.username !== user.username);
       localStorage.setItem('users', JSON.stringify(users));
-      localStorage.removeItem('user');
+      localStorage.removeItem('currentUser');
       navigate('/');
     }
   };

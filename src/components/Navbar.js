@@ -7,8 +7,8 @@ function Navbar({ user, setUser }) {
 
   const handleLogout = () => {
     setUser(null);
-    localStorage.removeItem('user');
-    navigate('/login');
+    localStorage.removeItem('currentUser'); // Xóa đúng key mà Home.js dùng
+    navigate('/login'); // Chuyển hướng về trang đăng nhập
   };
 
   return (
