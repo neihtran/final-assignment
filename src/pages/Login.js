@@ -14,7 +14,8 @@ function Login({ setUser }) {
 
     if (user) {
       setUser(user);
-      localStorage.setItem('user', JSON.stringify(user));
+      // Lưu thông tin đăng nhập với key "currentUser"
+      localStorage.setItem('currentUser', JSON.stringify(user));
       navigate('/dashboard');
     } else {
       alert('Invalid credentials');

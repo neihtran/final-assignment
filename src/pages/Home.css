@@ -1,103 +1,86 @@
-/* ===== Thanh điều hướng ===== */
-.navbar {
-  display: flex;
-  align-items: center;
-  background: linear-gradient(90deg, #4e73df, #1cc88a);
-  padding: 10px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+.user-section {
+  margin-bottom: 40px;
+  padding: 15px;
+  background: #f8f9fc;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.navbar a {
-  color: white;
-  text-decoration: none;
-  margin: 0 12px;
-  font-weight: 500;
-  transition: color 0.3s ease, transform 0.2s ease;
+.user-section h3 {
+  margin-bottom: 15px;
+  color: #4e73df;
 }
 
-.navbar a:hover {
-  color: #ffeb3b;
-  transform: translateY(-2px);
-}
-
-.navbar button {
-  background-color: #e74a3b;
-  border: none;
-  padding: 6px 14px;
-  color: white;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.navbar button:hover {
-  background-color: #c0392b;
-}
-
-/* ===== Lưới ảnh ===== */
+/* Lưới ảnh khi đăng nhập */
 .image-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
 }
 
-.image-item {
-  background: #fff;
-  border-radius: 12px;
+.image-item img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Hiệu ứng chồng ảnh khi chưa đăng nhập */
+.image-stack {
+  position: relative;
+  width: 200px;
+  height: 140px;
+}
+
+.stack-img {
+  position: absolute;
+  width: 180px;
+  height: 120px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  background: #ccc;
 }
 
-.image-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+.stack-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* Ảnh đồng kích thước cho tất cả trang */
-.upload-container .image-item img {
-  width: 100% !important;
-  height: 200px !important;
-  object-fit: cover !important;
-  display: block;
+/* Mờ ảnh + overlay khóa */
+.locked img {
+  filter: blur(2px) brightness(0.8);
 }
 
-/* Tên user dưới ảnh */
-.image-item p {
-  font-weight: bold;
-  padding: 10px 0;
-  text-align: center;
-}
-
-/* ===== Pagination ===== */
-.pagination {
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 8px;
 }
 
-.pagination button {
-  padding: 6px 12px;
-  border: none;
-  background-color: #4e73df;
+.lock-icon {
+  font-size: 24px;
   color: white;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 12px;
+  border-radius: 50%;
+}
+
+/* Số ảnh còn lại */
+.more-overlay {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  padding: 4px 8px;
   border-radius: 6px;
-  cursor: pointer;
   font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.pagination button:hover:not(:disabled) {
-  background-color: #2e59d9;
-}
-
-.pagination button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.pagination .active {
-  background-color: #1cc88a;
+  font-size: 14px;
 }

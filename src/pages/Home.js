@@ -2,68 +2,68 @@ import React, { useEffect, useState } from 'react';
 import './Home.css';
 
 function Home() {
-  const [allImages, setAllImages] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const imagesPerPage = 15;
+  const [users, setUsers] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const merged = [];
+    // Lấy danh sách user
+    const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+    setUsers(storedUsers);
 
-    users.forEach(u => {
-      (u.images || []).forEach(img => {
-        merged.push({ user: u.username, img });
-      });
-    });
-
-    setAllImages(merged);
-  }, []);
-
-  // Tính toán phân trang
-  const indexOfLastImage = currentPage * imagesPerPage;
-  const indexOfFirstImage = indexOfLastImage - imagesPerPage;
-  const currentImages = allImages.slice(indexOfFirstImage, indexOfLastImage);
-  const totalPages = Math.ceil(allImages.length / imagesPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber >= 1 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber);
+    // Kiểm tra đăng nhập
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser && currentUser.username) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
     }
-  };
+  }, []);
 
   return (
     <div className="upload-container">
       <h2>Tất cả ảnh của người dùng</h2>
 
-      <div className="image-grid">
-        {currentImages.map((item, index) => (
-          <div key={index} className="image-item">
-            <img src={item.img} alt={`all-${index}`} />
-            <p style={{ textAlign: 'center', margin: '5px 0' }}>{item.user}</p>
-          </div>
-        ))}
-      </div>
+      {users.map((user, idx) => (
+        <div key={idx} className="user-section">
+          <h3>{user.username}</h3>
 
-      {/* Phân trang */}
-      {totalPages > 1 && (
-        <div className="pagination" style={{ marginTop: '20px' }}>
-          <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-            {"<"}
-          </button>
-          {[...Array(totalPages)].map((_, i) => (
-            <button
-              key={i}
-              className={currentPage === i + 1 ? "active" : ""}
-              onClick={() => handlePageChange(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
-          <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-            {">"}
-          </button>
+          {isLoggedIn ? (
+            // Đã đăng nhập → hiện đầy đủ ảnh
+            <div className="image-grid">
+              {(user.images && user.images.length > 0) ? (
+                user.images.map((img, i) => (
+                  <div key={i} className="image-item">
+                    <img src={img} alt={`user-${idx}-img-${i}`} />
+                  </div>
+                ))
+              ) : (
+                <p style={{ color: '#888' }}>Người dùng chưa tải ảnh</p>
+              )}
+            </div>
+          ) : (
+            // Chưa đăng nhập → hiệu ứng chồng ảnh
+            <div className="image-stack">
+              {(user.images || []).slice(0, 3).map((img, i) => (
+                <div
+                  key={i}
+                  className="stack-img locked"
+                  style={{ top: `${i * 8}px`, left: `${i * 8}px` }}
+                >
+                  <img src={img} alt={`preview-${i}`} />
+                  <div className="lock-overlay">
+                    <span className="lock-icon">🔒</span>
+                  </div>
+                </div>
+              ))}
+              {user.images && user.images.length > 3 && (
+                <div className="more-overlay">
+                  +{user.images.length - 3}
+                </div>
+              )}
+            </div>
+          )}
         </div>
-      )}
+      ))}
     </div>
   );
 }
